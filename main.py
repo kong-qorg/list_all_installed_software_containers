@@ -27,7 +27,7 @@ def main():
     container_software_table = print_containers_details(image_list, token, podname)
     print(container_software_table)
 
-    # convert_to_csv(container_software_table)
+    convert_to_csv(container_software_table)
 
 if __name__ == '__main__':
     main()
