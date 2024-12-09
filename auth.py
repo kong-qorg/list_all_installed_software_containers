@@ -19,7 +19,7 @@ def get_jwt_token(username, password, podname):
 
 def getListOfContainers(token, podname):
     
-    url = f'{podname}/csapi/v1.3/containers?filter=state%3A%27RUNNING%27&pageNumber=1&pageSize=50&sort=created%3Adesc'
+    url = f'{podname}/csapi/v1.3/containers?filter=state%3A%27RUNNING%27&pageNumber=1&pageSize=250&sort=created%3Adesc'
     headers = {'Authorization': f'Bearer {token}'}
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
