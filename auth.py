@@ -35,7 +35,7 @@ def parse_json(json_data):
     result = []
     data = json.loads(json_data)
     for item in data['data']:
-        result.append((item['imageId'], item['sha'], item['name']))
+        result.append((item['imageId'], item['sha'], item['name'], item['containerId']))
     return result
 
 
@@ -66,32 +66,6 @@ def get_installed_softwares(container_sha, token, podname):
 
 
 
-# def print_containers_details(container_list_data, token, podname):
-
-#     containers_software_table = []
-#     software_dict = {}
-#     for item in container_list_data:
-#         list_of_softwares = get_installed_softwares(str(item[1]), token, podname)
-#         #print(f"\n\n\n\n ------- container Sha: {item[1]}, container name: {item[2]} --------")
-#         #print(list_of_softwares)
-        
-#         # get the list of softwares installed in a specific container sha by calling 'parse_softwares' function
-#         software_list = parse_softwares(json.dumps(list_of_softwares))
-
-#         # adding the software list to the dictionary
-#         software_dict['Container Id'] = item[0]
-#         software_dict['Container Name'] = item[2]
-#         software_dict['Software Lists'] = software_list
-        
-#         containers_software_table.append(software_dict)
-
-#     # Finally print the list of all softwares
-#     print("\n----- List of Software Installed --------\n")   
-#     return containers_software_table
-
-
-
-
 def print_containers_details(container_list_data, token, podname):
 
     uniq_container_list_data = list(set(container_list_data))
@@ -99,37 +73,21 @@ def print_containers_details(container_list_data, token, podname):
     with open('output.csv','a', newline='') as csvfile:
         writer = csv.writer(csvfile)
         for item in uniq_container_list_data:
+
             list_of_softwares = get_installed_softwares(str(item[1]), token, podname)
-            #print(f"\n\n\n\n ------- container Sha: {item[1]}, container name: {item[2]} --------")
-            #print(list_of_softwares)
+
         
             # get the list of softwares installed in a specific container sha by calling 'parse_softwares' function
             software_list = parse_softwares(json.dumps(list_of_softwares))
 
-            writer.writerow([item[0], item[2], software_list])
-            # adding the software list to the dictionary
-            #software_dict['Container Id'] = item[0]
+
+            # print('\n ############ Writing ########',item[3], item[2], software_list)
+            #software_dict['Container Id'] = item[3]
             #software_dict['Container Name'] = item[2]
-            #software_dict['Software Lists'] = software_list
-        
-            #containers_software_table.append(software_dict)
+            #software_dict['Software Lists'] = software_list            
+            writer.writerow([item[3], item[2], software_list])
 
+    # Finally Close the file
     csvfile.close()
-    # Finally print the list of all softwares
-    
-    
-    with open('output.csv','r') as file:
-        reader = csv.reader(file)
-        rows = [row for row in reader]
 
-    unique_rows = []
-
-    for row in rows:
-        if row not in unique_rows:
-            unique_rows.append(row)
-
-
-    with open('output.csv', 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerows(unique_rows)
 
